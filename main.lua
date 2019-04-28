@@ -25,7 +25,8 @@
 -- r to reload scripts
 
 -- TODO:
--- 1)Everything
+-- 1) Everything
+-- 2) Bounce ball off bumpers according to angle of impact
 
 SCREENWIDTH = 1200
 SCREENHEIGHT = SCREENWIDTH * .75
@@ -46,6 +47,10 @@ function love.load()
 	require "bumper"
 	require "ball"
 
+	leftBumper = Bumper(Vector(0,SCREENHEIGHT/2-30))
+	rightBumper = Bumper(Vector(SCREENWIDTH-20,SCREENHEIGHT/2-30))
+	ball = Ball()
+
 	w,h,flags = love.window.getMode()
 	love.window.setMode(SCREENWIDTH,SCREENHEIGHT,flags)
 	love.window.setTitle("Pong")
@@ -58,10 +63,18 @@ end
 
 function love.draw()
 	gui:draw()
+	leftBumper:draw()
+	ball:draw()
+	rightBumper:draw()
 end
 
 function love.update(d)
-	gui:update()
+		gui:update()
+	if(not paused) then
+		ball:update(d)
+		leftBumper:update(d)
+		rightBumper:update(d)
+	end
 end
 
 function love.keypressed(key)
